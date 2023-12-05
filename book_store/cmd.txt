@@ -1,0 +1,48 @@
+# python3 manage.py makemigrations
+membantuk table/ melakukan migrasi
+
+# python3 manage.py migrate
+mengeksekusi dan implementasi struktur table ke dalam django
+
+# python3 manage.py shell   
+membuat terminal 
+
+
+from book_outlet.models import Book
+
+harry_potter = Book(title='Harry Potter',rating=5)
+harry_potter.save() -> simpan data ke dalam database
+lord_of_the_rings = Book(title='Lord Of The Rings',rating=4)
+
+#filter buku menggunakan id
+Book.objects.get(id=3)
+
+#Filter seluruh buku yang laris
+Book.objects.filter(is_bestselling=True)
+
+Book.objects.filter(is_bestselling=True,rating=5)
+
+#filter buku yang ratingnya lebih rendah dari 3
+Book.objects.filter(rating__lt=3)
+
+#filter buku yang ratingnya lebih rendah dari 3 dan memiliki kata Story
+Book.objects.filter(rating__lt=3,title__contains='Story')
+
+#filter menggunakan or
+from django.db.models import Q
+Book.objects.filter(Q(rating__lt=3) | Q(is_bestselling=True))
+
+#kombinasi or dan and
+Book.objects.filter(Q(rating__lt=3) | Q(is_bestselling=True), Q(author='Rowling'))
+Book.objects.filter(Q(rating__lt=3) | Q(is_bestselling=True), author='Rowling')
+
+#slug
+Book.objects.get(title='Lord Of The Rings').slug 
+
+#masukkan foreign key
+from book_outlet.models import Book,Author 
+jkrowling = Author(first_name="J.K",last_name="Rowling") 
+jkrowling.save()
+
+ hp1 = Book(title='Harry Potter 1',rating=5,is_bestselling=True,slug='harry-potter-1',author=jkrowling)  
+ hp1.save()
